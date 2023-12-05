@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Json</title>
+  </head>
+  <body>
+    <header>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="todo.html">ToDo</a>
+            <a href="users.html">Users</a>
+            <a href="catFacts.html">Cat Facts</a>
+            <a href="ron-quotes.html">Ron Swanson Quotes</a>
+        </nav>
+    </header>
+    <main>
+      <label for="term-textbox">Search Term: </label>
+      <input type="text" id="term-textbox" />
+      <button id="display-quotes-button">Display</button>
+      <p id="display-quotes-paragraph">
+       
+      </p>
+    </main>
+    <script>
+      "use strict";
+
+      function init() {
+        //get html elements
+        // let variableNameHoldingHTMLElement = document.getElementById("idOfHTMLElement")
+        let termTextbox = document.querySelector("#term-textbox");
+        let displayQuotesButton = document.querySelector("#display-quotes-button");
+        let displayQuotesParagraph = document.querySelector("#display-quotes-paragraph");  
+
+        //Functions
+        function getURL() {
+            let term = termTextbox.value;
+            return `https://ron-swanson-quotes.herokuapp.com/v2/quotes/search/${term}`;
+        }
+
+        function clearDisplayQuotesP() {
+            displayQuotesParagraph.innerText = "";
+        }
+
+        function displayQuote(quote) {
+            displayQuotesParagraph.innerText += `"${quote}"\n\n`;
+        }
+
+        // write functions to handle events
+        function displayQuotes() {
+            let url = getURL();
+
+            clearDisplayQuotesP();
+
+            fetch(url)
+            .then(response => response.json())
+            .then(quotes => {
+                for (let quote of quotes) {
+                    console.log(quote);
+                    displayQuote(quote)
+                }
+            });
+
+        }
+
+        //wire-up the functions to an event
+        displayQuotesButton.addEventListener("click", displayQuotes);
+      }
+
+      window.onload = init;
+
+    </script>
+  </body>
+</html>
