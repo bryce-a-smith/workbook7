@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Json</title>
+  </head>
+  <body>
+    <header>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="todo.html">ToDo</a>
+            <a href="users.html">Users</a>
+        </nav>
+    </header>
+    <main>
+      <button id="display-users-button">Display Users</button>
+      <p id="display-users-paragraph">
+       
+      </p>
+    </main>
+    <script>
+      "use strict";
+
+      function init() {
+        //get html elements
+        // let variableNameHoldingHTMLElement = document.getElementById("idOfHTMLElement")
+        let todoTextbox = document.querySelector("#todo-textbox");
+        let displayButton = document.querySelector("#display-button");
+        let displayParagraph = document.querySelector("#display-paragraph");  
+        let displayUsersButton = document.querySelector("#display-users-button");
+        let displayUsersParagraph = document.querySelector("#display-users-paragraph");  
+
+        //Functions
+        function getURL() {
+            // let id = todoTextbox.value;
+            return `http://jsonplaceholder.typicode.com/users`;
+        }
+
+        function clearDisplayUserP() {
+            displayUsersParagraph.innerText = "";
+        }
+
+        function displayUser(user) {
+            let userData = `\nID: ${user.id}\nUsername: ${user.username}\nEmail: ${user.email}\n`;
+
+            let address = `${user.address.city}\n${user.address.street}, ${user.address.suite}\n${user.address.zipcode}\n`;
+
+            userData += `Address:\n${address}`;
+
+            userData += `Phone: ${user.phone}\nWebsite: ${user.website}`;
+
+            let company = `${user.company.name}\n${user.company.catchphrase}\n${user.company.bs}`;
+
+            userData += `Company:\n${company}`;
+
+            displayUsersParagraph.innerText += userData + "\n\n\n";
+        }
+
+        // write functions to handle events
+        function displayToDo() {
+            let url = getURL();
+
+            clearDisplayUserP();
+
+            fetch(url)
+            .then(response => response.json())
+            .then(users => {
+                for (let user of users) {
+                    displayUser(user);
+                }
+
+            });
+
+        }
+
+        //wire-up the functions to an event
+        displayUsersButton.addEventListener("click", displayToDo);
+      }
+
+      window.onload = init;
+
+    </script>
+  </body>
+</html>
