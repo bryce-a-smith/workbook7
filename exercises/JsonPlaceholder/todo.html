@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Json</title>
+  </head>
+  <body>
+    <header>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="todo.html">ToDo</a>
+        </nav>
+    </header>
+    <main>
+      <label for="todo-textbox">ToDo ID: </label>
+      <input type="text" id="todo-textbox" />
+      <button id="display-button">Display</button>
+      <p id="display-paragraph">
+       
+      </p>
+    </main>
+    <script>
+      "use strict";
+
+      function init() {
+        //get html elements
+        // let variableNameHoldingHTMLElement = document.getElementById("idOfHTMLElement")
+        let todoTextbox = document.querySelector("#todo-textbox");
+        let displayButton = document.querySelector("#display-button");
+        let displayParagraph = document.querySelector("#display-paragraph");  
+
+        //Functions
+        function getURL() {
+            let id = todoTextbox.value;
+            return `http://jsonplaceholder.typicode.com/users/${id}`;
+        }
+
+        function clearDisplayP() {
+            displayParagraph.innerText = "";
+        }
+
+        function displayUser(user) {
+            let userData = `ID: ${user.id}\n${user.name}\nUsername: ${user.username}\nEmail: ${user.email}`;
+
+            displayParagraph.innerText += userData;
+        }
+
+        // write functions to handle events
+        function displayToDo() {
+            let url = getURL();
+
+            clearDisplayP();
+
+            fetch(url)
+            .then(response => response.json())
+            .then(user => {
+                displayUser(user);
+            });
+
+        }
+
+        //wire-up the functions to an event
+        displayButton.addEventListener("click", displayToDo);
+      }
+
+      window.onload = init;
+
+    </script>
+  </body>
+</html>
