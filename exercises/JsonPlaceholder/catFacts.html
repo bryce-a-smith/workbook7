@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Json</title>
+  </head>
+  <body>
+    <header>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="todo.html">ToDo</a>
+            <a href="users.html">Users</a>
+            <a href="catFacts.html">Cat Facts</a>
+        </nav>
+    </header>
+    <main>
+        <h1>Cat Facts</h1>
+      <button id="display-fact-button">Display Cat Fact</button>
+      <p id="display-fact-paragraph">     </p>
+
+        <button id="save-fact-button">Save Fact</button>
+        <button id="clear-fact-list-button">Clear Facts List</button>
+       
+        <h3 id="my-facts-h3" style="display: none;">My Facts</h3>
+        <table id="facts-table" style="display: none">
+          <thead>
+            <tr>
+              <th>Cat Facts</th>
+            </tr>
+          </thead>
+          <tbody id="facts-table-body"></tbody>
+        </table>
+
+ 
+    </main>
+    <script>
+      "use strict";
+
+      function init() {
+        //get html elements
+        // let variableNameHoldingHTMLElement = document.getElementById("idOfHTMLElement")
+        let displayFactButton = document.querySelector("#display-fact-button");
+        let displayFactParagraph = document.querySelector("#display-fact-paragraph");
+        let saveFactButton = document.querySelector("#save-fact-button");
+        let clearFactListButton = document.querySelector("#clear-fact-list-button");
+        let factsTable = document.querySelector("#facts-table");
+        let factsTableBody = document.querySelector("#facts-table-body")
+        let myFactsH3 = document.querySelector("#my-facts-h3")
+
+
+        //Functions
+        function getURL() {
+            return `https://meowfacts.herokuapp.com/`;
+        }
+
+        function clearDisplayFactP() {
+            displayFactParagraph.innerText = "";
+        }
+
+        function displayFact(fact) {
+            displayFactParagraph.innerText += fact.data;
+        }
+
+        // write functions to handle events
+        function displayCatFact() {
+            let url = getURL();
+
+            clearDisplayFactP();
+
+            fetch(url)
+            .then(response => response.json())
+            .then(fact => {
+                    displayFact(fact);
+            });
+        }
+
+        function buildUserRow(fact) {
+            let tr = factsTableBody.insertRow();
+
+            let td1 = tr.insertCell();
+            td1.innerText = fact;
+        }
+
+        function saveFact(fact) {
+            if(factsTable.style.display == "none") {
+                factsTable.style.display = "block";
+            }
+            if(myFactsH3.style.display == "none") {
+                myFactsH3.style.display = "block";
+            }
+
+
+            buildUserRow(displayFactParagraph.innerText);
+        }
+
+        function clearFactList() {
+            let tableRows = document.querySelectorAll("tbody > tr");
+
+            Array.from(tableRows).forEach((row) => {
+                factsTableBody.removeChild(row);
+            });
+
+            if(factsTable.style.display == "block") {
+                factsTable.style.display = "none";
+            }
+            if(myFactsH3.style.display == "block") {
+                myFactsH3.style.display = "none";
+            }
+        }
+
+        //wire-up the functions to an event
+        displayFactButton.addEventListener("click", displayCatFact);
+        saveFactButton.addEventListener("click", saveFact);
+        clearFactListButton.addEventListener("click", clearFactList);
+      }
+
+      window.onload = init;
+
+    </script>
+  </body>
+</html>
