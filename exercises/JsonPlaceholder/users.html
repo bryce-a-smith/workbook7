@@ -58,7 +58,7 @@
         }
 
         // write functions to handle events
-        function displayToDo() {
+        function displayUsers() {
             let url = getURL();
 
             clearDisplayUserP();
@@ -75,7 +75,7 @@
         }
 
         //wire-up the functions to an event
-        displayUsersButton.addEventListener("click", displayToDo);
+        displayUsersButton.addEventListener("click", displayUsers);
       }
 
       window.onload = init;
